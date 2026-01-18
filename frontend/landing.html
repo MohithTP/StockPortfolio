@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finnex | Intelligent Portfolio Management</title>
+    <link rel="stylesheet" href="style.css?v=12">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* LANDING SPECIFIC OVERRIDES */
+        body {
+            background: linear-gradient(180deg, #F8FAFC 0%, #FFFFFF 100%);
+            overflow-y: auto !important;
+            height: auto !important;
+            display: block !important;
+            /* Force block to override style.css flex */
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            position: relative;
+        }
+
+        /* Ambient Background Mesh */
+        body::before {
+            content: '';
+            position: absolute;
+            top: -200px;
+            right: -100px;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(100, 37, 254, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        body::after {
+            content: '';
+            position: absolute;
+            top: 400px;
+            left: -200px;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.05) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* HEADER */
+        .landing-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 24px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.8);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+            transition: all 0.3s ease;
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+
+        .brand-logo i {
+            color: var(--primary-purple);
+            font-size: 1.6rem;
+        }
+
+        .nav-cta {
+            padding: 10px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .btn-ghost {
+            color: var(--text-secondary);
+            margin-right: 16px;
+        }
+
+        .btn-ghost:hover {
+            color: var(--primary-purple);
+        }
+
+        .btn-primary-small {
+            background: var(--primary-purple);
+            color: white;
+            box-shadow: 0 4px 12px rgba(100, 37, 254, 0.2);
+        }
+
+        .btn-primary-small:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(100, 37, 254, 0.3);
+        }
+
+        /* HERO SECTION */
+        .hero-section {
+            width: 100%;
+            min-height: 100vh;
+            margin: 0 auto;
+            padding: 100px 20px 40px;
+            /* Reduced top/bottom padding slightly */
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            /* Flex layout for centering */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(100, 37, 254, 0.05);
+            border: 1px solid rgba(100, 37, 254, 0.1);
+            border-radius: 100px;
+            color: var(--primary-purple);
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            letter-spacing: -1.5px;
+            color: var(--text-primary);
+            animation: fadeInUp 0.8s ease-out 0.2s backwards;
+        }
+
+        .hero-title span {
+            background: linear-gradient(135deg, var(--primary-purple), #8B5CF6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            /* standard compatibility */
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto 40px;
+            line-height: 1.6;
+            animation: fadeInUp 0.8s ease-out 0.4s backwards;
+        }
+
+        .hero-actions {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-bottom: 60px;
+            animation: fadeInUp 0.8s ease-out 0.6s backwards;
+        }
+
+        .btn-hero-lg {
+            padding: 16px 40px;
+            border-radius: 14px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-glow {
+            background: var(--primary-purple);
+            color: white;
+            box-shadow: 0 10px 25px -5px rgba(100, 37, 254, 0.4);
+        }
+
+        .btn-glow:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px -5px rgba(100, 37, 254, 0.5);
+        }
+
+        .btn-outline {
+            background: white;
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-outline:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary-purple);
+            color: var(--primary-purple);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* HERO IMAGE */
+        .hero-image-wrapper {
+            position: relative;
+            margin-top: 20px;
+            animation: fadeInUp 1s ease-out 0.8s backwards;
+            perspective: 1000px;
+        }
+
+        .hero-image {
+            width: 100%;
+            max-width: 1000px;
+            border-radius: 24px;
+            box-shadow:
+                0 40px 80px -20px rgba(50, 50, 93, 0.15),
+                0 0 0 1px rgba(0, 0, 0, 0.02);
+            transform: rotateX(2deg);
+            transition: transform 0.5s ease;
+        }
+
+        .hero-image:hover {
+            transform: rotateX(0deg) scale(1.01);
+        }
+
+        /* FEATURES SECTION */
+        .features-section {
+            padding: 100px 20px;
+            background: white;
+            position: relative;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 32px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .land-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 32px;
+            transition: all 0.3s ease;
+        }
+
+        .land-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.08);
+            border-color: rgba(100, 37, 254, 0.2);
+        }
+
+        .icon-box {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 24px;
+        }
+
+        /* FOOTER */
+        .landing-footer {
+            padding: 80px 20px 40px;
+            text-align: center;
+            background: #F8FAFC;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footer-logo {
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            margin-bottom: 24px;
+            display: inline-block;
+        }
+
+        .footer-text {
+            color: var(--text-muted);
+            margin-bottom: 32px;
+            font-size: 0.95rem;
+        }
+
+        .footer-credits {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            padding-top: 24px;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .landing-header {
+                padding: 16px 20px;
+            }
+
+            .brand-logo {
+                font-size: 1.25rem;
+            }
+
+            .nav-cta.btn-ghost {
+                display: none;
+            }
+
+            .hero-section {
+                padding: 120px 20px 60px;
+            }
+
+            .hero-actions {
+                flex-direction: column;
+                width: 100%;
+                max-width: 100%;
+                align-items: center;
+                gap: 12px;
+            }
+
+            .btn-hero-lg {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .hero-image-wrapper {
+                margin-top: 40px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+
+            body::before,
+            body::after {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <header class="landing-header">
+        <a href="#" class="brand-logo">
+            <i class="fas fa-layer-group"></i>
+            Finnex
+        </a>
+        <nav>
+            <a href="index.html" class="nav-cta btn-ghost">Sign In</a>
+            <a href="index.html" class="nav-cta btn-primary-small">Get Started</a>
+        </nav>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="hero-section">
+        <div class="hero-pill">
+            <i class="fas fa-sparkles"></i>
+            <span>Introducing Intelligent Portfolio 2.0</span>
+        </div>
+
+        <h1 class="hero-title">
+            The Future of<br>
+            <span>Wealth Management</span>
+        </h1>
+
+        <p class="hero-subtitle">
+            Experience the power of professional-grade tools with the simplicity of modern design.
+            Real-time tracking, AI-driven insights, and smart tax optimization in one unified platform.
+        </p>
+
+        <div class="hero-actions">
+            <a href="index.html" class="btn-hero-lg btn-glow">
+                Launch Dashboard
+                <i class="fas fa-arrow-right"></i>
+            </a>
+            <a href="#features" class="btn-hero-lg btn-outline">
+                Explore Features
+                <i class="fas fa-chevron-down"></i>
+            </a>
+        </div>
+
+        <div class="hero-image-wrapper">
+            <!-- Ensure this path is correct relative to the HTML structure -->
+            <!-- Using the generated image -->
+            <img src="landing_hero_dashboard.png" alt="Finnex Dashboard Interface" class="hero-image">
+        </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section id="features" class="features-section">
+        <div class="features-grid">
+            <div class="land-card">
+                <div class="icon-box" style="background: rgba(16, 185, 129, 0.1); color: var(--accent-success);">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 12px; color: var(--text-primary);">
+                    Real-Time Market Data</h3>
+                <p style="color: var(--text-secondary); line-height: 1.6;">
+                    Stay synchronized with global markets. Our streaming engine pushes live updates every 30 minutes,
+                    ensuring your portfolio value is always accurate.
+                </p>
+            </div>
+
+            <div class="land-card">
+                <div class="icon-box" style="background: rgba(100, 37, 254, 0.1); color: var(--primary-purple);">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 12px; color: var(--text-primary);">
+                    AI-Powered Insights</h3>
+                <p style="color: var(--text-secondary); line-height: 1.6;">
+                    Leverage advanced algorithms to analyze your holdings. Get personalized recommendations to balance
+                    risk and maximize growth potential.
+                </p>
+            </div>
+
+            <div class="land-card">
+                <div class="icon-box" style="background: rgba(245, 158, 11, 0.1); color: #F59E0B;">
+                    <i class="fas fa-file-invoice-dollar"></i>
+                </div>
+                <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 12px; color: var(--text-primary);">Smart
+                    Tax Optimization</h3>
+                <p style="color: var(--text-secondary); line-height: 1.6;">
+                    Automated FIFO tracking distinguishes between Short-Term and Long-Term gains, helping you make
+                    tax-efficient trading decisions.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="landing-footer">
+        <div class="footer-logo">Finnex</div>
+        <div class="footer-text">
+            Empowering the next generation of investors.
+        </div>
+        <div class="footer-credits">
+            &copy; 2026 Finnex Inc. All rights reserved.<br>
+            <span style="opacity: 0.7; margin-top: 8px; display: inline-block;">Presented by T P Mohith and Srujan R |
+                Dept of AIML</span>
+        </div>
+    </footer>
+
+</body>
+
+</html>

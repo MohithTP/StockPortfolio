@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finnex | Asset Allocation</title>
+    <link rel="stylesheet" href="style.css?v=10">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- MAIN APP LAYOUT -->
+    <div class="fx-app-wrapper" id="main-layout" style="display: none;">
+        <aside class="fx-sidebar">
+            <a href="index.html" class="sidebar-brand">
+                <i class="fas fa-layer-group"></i>
+                <span>Finnex</span>
+            </a>
+
+            <ul class="fx-sidebar-nav">
+                <li>
+                    <a href="index.html" class="fx-nav-link">
+                        <i class="fas fa-th-large"></i> Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a href="portfolio.html" class="fx-nav-link active">
+                        <i class="fas fa-briefcase"></i> Portfolio
+                    </a>
+                </li>
+                <li>
+                    <a href="market.html" class="fx-nav-link">
+                        <i class="fas fa-chart-bar"></i> Trading & Market
+                    </a>
+                </li>
+                <li>
+                    <a href="news.html" class="fx-nav-link">
+                        <i class="fas fa-newspaper"></i> News Portal
+                    </a>
+                </li>
+                <li>
+                    <a href="ai_insights.html" class="fx-nav-link">
+                        <i class="fas fa-magic"></i> AI Insights
+                    </a>
+                </li>
+                <li>
+                    <a href="tax.html" class="fx-nav-link">
+                        <i class="fas fa-file-invoice-dollar"></i> Tax Reports
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <main class="fx-main-container">
+            <header class="fx-topbar">
+                <div class="search-wrapper">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" class="search-input" placeholder="Search for stocks and more...">
+                </div>
+
+                <div class="topbar-actions">
+                    <button class="notif-btn" title="Notifications">
+                        <i class="far fa-bell"></i>
+                    </button>
+
+                    <div class="user-profile-trigger" onclick="toggleProfileMenu()" title="Account">
+                        <div class="user-avatar" id="user-initial"
+                            style="width: 40px; height: 40px; border-radius: 12px; background: var(--primary-purple); color: white; display: flex; align-items: center; justify-content: center; font-weight: 600;">
+                            U</div>
+                    </div>
+
+                    <!-- Dropdown Menu -->
+                    <div id="profile-menu" class="profile-dropdown">
+                        <div class="profile-header">
+                            <div class="user-avatar" id="user-initial-dropdown"
+                                style="width: 44px; height: 44px; border-radius: 12px; background: var(--primary-purple); color: white; display: flex; align-items: center; justify-content: center; font-weight: 600;">
+                                U</div>
+                            <div class="profile-info">
+                                <span class="profile-name" id="user-name-display">Welcome</span>
+                                <span class="profile-email" id="user-email-display">user@example.com</span>
+                            </div>
+                        </div>
+                        <button class="dropdown-item" onclick="location.href='portfolio.html'">
+                            <i class="fas fa-user-circle"></i> View Profile
+                        </button>
+                        <button class="dropdown-item" onclick="location.href='tax.html'">
+                            <i class="fas fa-cog"></i> Settings
+                        </button>
+                        <hr style="border: none; border-top: 1px solid var(--border-color); margin: 4px 0;">
+                        <button class="dropdown-item logout" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i> Sign Out
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <div class="fx-content">
+
+                <!-- Portfolio Header Section -->
+                <div class="fx-section-header">
+                    <div>
+                        <h1 class="fx-section-title">Asset Allocation & Portfolio</h1>
+                        <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 4px;">Detailed view of
+                            your current holdings and fiscal performance.</p>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-size: 0.95rem; color: var(--text-primary); font-weight: 600;">
+                            <i class="far fa-calendar-alt"></i> <span id="current-date">January 18, 2026</span>
+                        </div>
+                        <button class="btn-primary"
+                            style="width: auto; padding: 10px 20px; font-size: 0.85rem; margin-top: 12px; border-radius: 12px;"
+                            onclick="loadPortfolioPage()">
+                            <i class="fas fa-sync-alt"></i> Refresh Data
+                        </button>
+                    </div>
+                </div>
+
+                <!-- KPI Cards -->
+                <div class="grid-kpi">
+                    <div class="kpi-card purple">
+                        <div class="kpi-title">Total Portfolio Value</div>
+                        <div class="kpi-value" id="port-equity">₹0.00</div>
+                        <div class="kpi-sub"><i class="fas fa-chart-line"></i> Value of all assets</div>
+                    </div>
+                    <div class="kpi-card dark">
+                        <div class="kpi-title">Available Cash</div>
+                        <div class="kpi-value" id="port-cash">₹0.00</div>
+                        <div class="kpi-sub" style="opacity: 0.8;"><i class="fas fa-wallet"></i> Buying power</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-title">Unrealized P&L</div>
+                        <div class="kpi-value positive" id="port-pl">₹0.00</div>
+                        <div class="kpi-sub" style="color: var(--text-muted);"><i class="fas fa-arrow-trend-up"></i>
+                            Performance to date</div>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <!-- Left Column: Chart -->
+                    <div class="fx-card">
+                        <h2 class="fx-section-title" style="margin-bottom: 24px;">Sector Distribution</h2>
+                        <div class="chart-container" style="height: 380px;">
+                            <canvas id="allocationChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Transactions -->
+                    <div class="fx-card" style="display: flex; flex-direction: column;">
+                        <h2 class="fx-section-title" style="margin-bottom: 24px;">Recent History</h2>
+                        <div style="overflow-x: auto; flex: 1;">
+                            <table class="modern-table" style="font-size: 0.85rem;">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Type</th>
+                                        <th>Symbol</th>
+                                        <th>Qty</th>
+                                        <th>Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="txn-history-body">
+                                    <tr>
+                                        <td colspan="5"
+                                            style="text-align: center; padding: 40px; color: var(--text-muted);">
+                                            <i class="fas fa-history"
+                                                style="font-size: 1.5rem; margin-bottom: 12px; display: block;"></i>
+                                            Loading transactions...
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bottom Section: Detailed Holdings (Full Width) -->
+                <div class="fx-card" style="margin-top: 32px;">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                        <h2 class="fx-section-title">Detailed Holdings Analysis</h2>
+                        <div class="badge badge-success">Live Updates</div>
+                    </div>
+                    <div style="overflow-x: auto;">
+                        <table class="modern-table">
+                            <thead>
+                                <tr>
+                                    <th>Asset Name</th>
+                                    <th>Qty</th>
+                                    <th>Avg Cost</th>
+                                    <th>Market Price</th>
+                                    <th>Total Value</th>
+                                    <th>Unrealized P/L</th>
+                                </tr>
+                            </thead>
+                            <tbody id="detailed-holdings-body">
+                                <tr>
+                                    <td colspan="6"
+                                        style="text-align: center; padding: 60px; color: var(--text-muted);">
+                                        <i class="fas fa-spinner fa-spin"
+                                            style="font-size: 2rem; margin-bottom: 16px; display: block; color: var(--primary-purple);"></i>
+                                        Syncing your assets...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div> <!-- End fx-content -->
+
+            <footer
+                style="padding: 32px 40px; border-top: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.85rem; display: flex; justify-content: space-between;">
+                <div>&copy; 2026 Finnex | Portfolio Manager</div>
+                <div style="display: flex; gap: 20px;">
+                    <a href="#" style="color: inherit; text-decoration: none;">Privacy</a>
+                    <a href="#" style="color: inherit; text-decoration: none;">Terms</a>
+                </div>
+            </footer>
+        </main>
+
+        <!-- Auth Check Overlay (Hidden but logic runs) -->
+        <div id="auth-overlay" class="auth-wrapper" style="display: none;"></div>
+
+        <script src="scripts.js?v=10"></script>
+        <script>
+            // Page specific initialization
+            document.addEventListener('DOMContentLoaded', () => {
+                checkSession();
+                // We need a slight delay or callback to ensure user is loaded before fetching specific data
+                // But checkSession calls loadPortfolio() which is for index. 
+                // We should override/extend logic for this page.
+                // Ideally scripts.js handles routing logic or we explicitly call page functions.
+                setTimeout(loadPortfolioPage, 100);
+            });
+        </script>
+</body>
+
+</html>

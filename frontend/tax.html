@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finnex | Tax & Gains</title>
+    <link rel="stylesheet" href="style.css?v=12">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- MAIN APP LAYOUT -->
+    <div class="fx-app-wrapper" id="main-layout" style="display: none;">
+        <aside class="fx-sidebar">
+            <a href="index.html" class="sidebar-brand">
+                <i class="fas fa-layer-group"></i>
+                <span>Finnex</span>
+            </a>
+
+            <ul class="fx-sidebar-nav">
+                <li>
+                    <a href="index.html" class="fx-nav-link">
+                        <i class="fas fa-th-large"></i> Dashboard
+                    </a>
+                </li>
+                <li>
+                    <a href="portfolio.html" class="fx-nav-link">
+                        <i class="fas fa-briefcase"></i> Portfolio
+                    </a>
+                </li>
+                <li>
+                    <a href="market.html" class="fx-nav-link">
+                        <i class="fas fa-chart-bar"></i> Trading & Market
+                    </a>
+                </li>
+                <li>
+                    <a href="news.html" class="fx-nav-link">
+                        <i class="fas fa-newspaper"></i> News Portal
+                    </a>
+                </li>
+                <li>
+                    <a href="ai_insights.html" class="fx-nav-link">
+                        <i class="fas fa-magic"></i> AI Insights
+                    </a>
+                </li>
+                <li>
+                    <a href="tax.html" class="fx-nav-link active">
+                        <i class="fas fa-file-invoice-dollar"></i> Tax Reports
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <main class="fx-main-container">
+            <header class="fx-topbar">
+                <div class="search-wrapper">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" class="search-input" placeholder="Search for transactions...">
+                </div>
+
+                <div class="topbar-actions">
+                    <button class="notif-btn" title="Notifications">
+                        <i class="far fa-bell"></i>
+                    </button>
+
+                    <div class="user-profile-trigger" onclick="toggleProfileMenu()" title="Account">
+                        <div class="user-avatar" id="user-initial"
+                            style="width: 40px; height: 40px; border-radius: 12px; background: var(--primary-purple); color: white; display: flex; align-items: center; justify-content: center; font-weight: 600;">
+                            U</div>
+                    </div>
+
+                    <!-- Dropdown Menu -->
+                    <div id="profile-menu" class="profile-dropdown">
+                        <div class="profile-header">
+                            <div class="user-avatar" id="user-initial-dropdown"
+                                style="width: 44px; height: 44px; border-radius: 12px; background: var(--primary-purple); color: white; display: flex; align-items: center; justify-content: center; font-weight: 600;">
+                                U</div>
+                            <div class="profile-info">
+                                <span class="profile-name" id="user-name-display">Welcome</span>
+                                <span class="profile-email" id="user-email-display">user@example.com</span>
+                            </div>
+                        </div>
+                        <button class="dropdown-item" onclick="location.href='portfolio.html'">
+                            <i class="fas fa-user-circle"></i> View Profile
+                        </button>
+                        <button class="dropdown-item" onclick="location.href='tax.html'">
+                            <i class="fas fa-cog"></i> Settings
+                        </button>
+                        <hr style="border: none; border-top: 1px solid var(--border-color); margin: 4px 0;">
+                        <button class="dropdown-item logout" onclick="logout()">
+                            <i class="fas fa-sign-out-alt"></i> Sign Out
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <div class="fx-content">
+                <!-- Tax Header Section -->
+                <div class="fx-section-header">
+                    <h1 class="fx-section-title">Tax Analysis & Realized Gains</h1>
+                    <div style="font-size: 0.9rem; color: var(--text-secondary); font-weight: 500;">
+                        <i class="far fa-calendar-alt"></i> <span id="current-date">January 18, 2026</span>
+                    </div>
+                </div>
+
+                <!-- Tax Summary Cards -->
+                <div class="grid-kpi" style="margin-bottom: 32px;">
+                    <div class="fx-card">
+                        <div class="kpi-title">Short Term Gains (STCG)</div>
+                        <div class="kpi-value" id="tax-stcg">₹0.00</div>
+                        <div class="kpi-sub"><i class="fas fa-clock"></i> Held &lt; 1 Year</div>
+                    </div>
+                    <div class="fx-card">
+                        <div class="kpi-title">Long Term Gains (LTCG)</div>
+                        <div class="kpi-value" id="tax-ltcg">₹0.00</div>
+                        <div class="kpi-sub"><i class="fas fa-history"></i> Held &gt; 1 Year</div>
+                    </div>
+                    <div class="fx-card" style="background: linear-gradient(135deg, #FFF9EB, #FFFFFF);">
+                        <div class="kpi-title">Est. Tax Liability</div>
+                        <div class="kpi-value" id="tax-liability" style="color: var(--accent-danger);">₹0.00</div>
+                        <div class="kpi-sub"><i class="fas fa-calculator"></i> Rough Estimate</div>
+                    </div>
+                </div>
+
+                <div class="fx-card">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                        <h3 class="section-title" style="margin: 0;">Detailed Realized Gains (FIFO)</h3>
+                        <button class="btn-primary"
+                            style="width: auto; padding: 10px 20px; font-size: 0.9rem; margin-top: 0; border-radius: 12px;"
+                            onclick="loadTaxData()">
+                            <i class="fas fa-sync-alt"></i> Recalculate FIFO
+                        </button>
+                    </div>
+                    <div style="overflow-x: auto;">
+                        <table class="modern-table">
+                            <thead>
+                                <tr>
+                                    <th>Stock</th>
+                                    <th>Term</th>
+                                    <th>Qty</th>
+                                    <th>Buy Date</th>
+                                    <th>Sell Date</th>
+                                    <th>Buy Price</th>
+                                    <th>Sell Price</th>
+                                    <th>Gain/Loss</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tax-body">
+                                <tr>
+                                    <td colspan="8"
+                                        style="text-align: center; padding: 48px; color: var(--text-muted);">
+                                        <i class="fas fa-spinner fa-spin" style="margin-right: 8px;"></i> Analyzing
+                                        transaction history...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div> <!-- End fx-content -->
+
+            <footer
+                style="padding: 32px 40px; border-top: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.85rem; display: flex; justify-content: space-between;">
+                <div>&copy; 2026 Finnex | Tax & Compliance</div>
+                <div style="display: flex; gap: 20px;">
+                    <a href="#" style="color: inherit; text-decoration: none;">FIFO Methodology</a>
+                    <a href="#" style="color: inherit; text-decoration: none;">Export CSV</a>
+                </div>
+            </footer>
+        </main>
+    </div>
+
+    <!-- Auth Check Overlay -->
+    <div id="auth-overlay" class="auth-wrapper" style="display: none;"></div>
+    <script src="scripts.js?v=12"></script>
+</body>
+
+</html>
