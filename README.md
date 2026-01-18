@@ -33,8 +33,8 @@
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/finnex.git
-   cd finnex
+   git clone https://github.com/MohithTP/StockPortfolio.git
+   cd StockPortfolio
    ```
 
 2. **Install dependencies**
@@ -68,7 +68,7 @@
 
 - **User Portal**:
   - Email: `mohith@example.com`
-  - Password: `password123`
+  - Password: `password`
 
 - **Admin Portal**:
   - Username: `admin`
@@ -82,4 +82,4 @@ Finnex features a **Glassmorphism** UI style with:
 - "Outfit" and "Inter" typography for a premium financial feel.
 
 ---
-&copy; 2026 Finnex Inc. | Dept of AIML
+&copy; 2026 Finnex Inc.
