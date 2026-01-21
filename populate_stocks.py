@@ -47,18 +47,18 @@ sectors_data = {
         ("RELIANCE", "Reliance Industries", 2950.00), ("ONGC", "Oil & Natural Gas Corp", 270.00), ("NTPC", "NTPC Ltd", 350.00),
         ("POWERGRID", "Power Grid Corp", 280.00), ("COALINDIA", "Coal India Ltd", 450.00), ("BPCL", "Bharat Petroleum", 600.00),
         ("IOC", "Indian Oil Corp", 170.00), ("GAIL", "GAIL (India) Ltd", 190.00), ("ADANIGREEN", "Adani Green Energy", 1800.00),
-        ("ADANITRANS", "Adani Energy Solutions", 1100.00), ("TATAPOWER", "Tata Power", 430.00), ("JSWENERGY", "JSW Energy", 650.00),
+        ("ADANIENSOL", "Adani Energy Solutions", 1100.00), ("TATAPOWER", "Tata Power", 430.00), ("JSWENERGY", "JSW Energy", 650.00),
         ("RECLTD", "REC Ltd", 500.00), ("PFC", "Power Finance Corp", 450.00), ("NHPC", "NHPC Ltd", 95.00),
         ("SJVN", "SJVN Ltd", 125.00), ("IREDA", "IREDA Ltd", 180.00), ("OIL", "Oil India Ltd", 630.00),
         ("HPCL", "Hindustan Petroleum", 500.00), ("GUJGASLTD", "Gujarat Gas Ltd", 550.00)
     ],
     "Consumer": [
-        ("HUL", "Hindustan Unilever", 2400.00), ("ITC", "ITC Ltd", 410.00), ("TITAN", "Titan Company", 3600.00),
+        ("HINDUNILVR", "Hindustan Unilever", 2400.00), ("ITC", "ITC Ltd", 410.00), ("TITAN", "Titan Company", 3600.00),
         ("ASIANPAINT", "Asian Paints", 2850.00), ("NESTLEIND", "Nestle India", 2500.00), ("TATACONSUM", "Tata Consumer Products", 1100.00),
         ("BRITANNIA", "Britannia Industries", 4800.00), ("VBL", "Varun Beverages", 1450.00), ("PIDILITIND", "Pidilite Industries", 3000.00),
         ("GODREJCP", "Godrej Consumer Products", 1250.00), ("DABUR", "Dabur India", 530.00), ("MARICO", "Marico Ltd", 520.00),
         ("COLPAL", "Colgate-Palmolive India", 2800.00), ("PGHH", "P&G Hygiene", 17000.00), ("UBL", "United Breweries", 1800.00),
-        ("MCDOWELL-N", "United Spirits", 1150.00), ("EMAMILTD", "Emami Ltd", 450.00), ("JYOTHYLAB", "Jyothy Labs", 450.00),
+        ("UNISPIRITS", "United Spirits", 1150.00), ("EMAMILTD", "Emami Ltd", 450.00), ("JYOTHYLAB", "Jyothy Labs", 450.00),
         ("NYKAA", "FSN E-Commerce (Nykaa)", 160.00), ("HONAUT", "Honeywell Automation", 48000.00)
     ]
 }
