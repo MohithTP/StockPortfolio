@@ -99,9 +99,9 @@ def analyze_portfolio(user_id):
                     max_gap = gap
                     underweight_sector = sector
 
-        if underweight_sector and cash_balance > 25000:
+        if underweight_sector and cash_balance > 10000:
             cur.execute("""
-                SELECT symbol, name, current_price, day_change 
+                SELECT symbol, name, current_price, momentum_score 
                 FROM Stock 
                 WHERE sector = %s 
                 AND stock_id NOT IN (SELECT stock_id FROM Portfolio WHERE user_id = %s)

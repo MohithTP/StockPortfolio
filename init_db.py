@@ -33,7 +33,8 @@ COMMANDS = [
         symbol VARCHAR(10) UNIQUE NOT NULL,
         name VARCHAR(100),
         sector VARCHAR(50),
-        current_price DECIMAL(10, 2) NOT NULL
+        current_price DECIMAL(10, 2) NOT NULL,
+        momentum_score DECIMAL(5, 2) DEFAULT 0.0
     )
     """,
     # Portfolio

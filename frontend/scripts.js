@@ -96,6 +96,14 @@ async function fetchLatestUserData() {
     if (!currentUser) return;
     try {
         const res = await fetch(`${API_BASE}/user/${currentUser.user_id}`);
+
+        // Handle Invalid Session (User deleted/DB reset)
+        if (res.status === 404) {
+            console.warn("User ID not found. Session invalid.");
+            logout();
+            return;
+        }
+
         if (res.ok) {
             const data = await res.json();
             currentUser.cash_balance = data.cash_balance;
@@ -331,9 +339,6 @@ async function loadPortfolioPage() {
             tbody.innerHTML = '';
             let totalEquity = 0;
             let totalCostBasis = 0;
-            const labels = [];
-            const dataPoints = [];
-            const colors = [];
 
             holdings.forEach((item, index) => {
                 const marketVal = item.total_quantity * item.current_price;
@@ -343,14 +348,6 @@ async function loadPortfolioPage() {
                 totalEquity += marketVal;
                 totalCostBasis += costBasis;
 
-                // Chart Data
-                if (marketVal > 0) {
-                    labels.push(item.symbol);
-                    dataPoints.push(marketVal);
-                    // Generate Color
-                    const hue = (index * 137.5) % 360;
-                    colors.push(`hsl(${hue}, 70%, 60%)`);
-                }
 
                 const row = tbody.insertRow();
                 row.innerHTML = `
@@ -377,8 +374,28 @@ async function loadPortfolioPage() {
                 plElement.className = `kpi-value ${totalPL >= 0 ? 'positive' : 'negative'}`;
             }
 
+            // Group by Sector
+            const sectorMap = {};
+
+            holdings.forEach(item => {
+                const marketVal = item.total_quantity * item.current_price;
+                if (marketVal > 0) {
+                    if (!sectorMap[item.sector]) {
+                        sectorMap[item.sector] = { value: 0, companies: [] };
+                    }
+                    sectorMap[item.sector].value += marketVal;
+                    sectorMap[item.sector].companies.push(item.symbol);
+                }
+            });
+
+            // Prepare Chart Data
+            const labels = Object.keys(sectorMap);
+            const dataPoints = labels.map(k => sectorMap[k].value);
+            const companyLists = labels.map(k => sectorMap[k].companies);
+            const colors = labels.map((_, i) => `hsl(${(i * 137.5) % 360}, 70%, 60%)`);
+
             // Render Chart
-            renderAllocationChart(labels, dataPoints, colors);
+            renderAllocationChart(labels, dataPoints, colors, companyLists);
         }
 
     } catch (err) { console.error(err); }
@@ -448,7 +465,7 @@ async function loadTaxReport() {
 }
 
 let allocChartInstance = null;
-function renderAllocationChart(labels, data, colors) {
+function renderAllocationChart(labels, data, colors, companyLists) {
     const ctx = document.getElementById('allocationChart').getContext('2d');
 
     if (allocChartInstance) {
@@ -462,7 +479,8 @@ function renderAllocationChart(labels, data, colors) {
             datasets: [{
                 data: data,
                 backgroundColor: colors,
-                borderWidth: 0
+                borderWidth: 0,
+                hoverOffset: 10
             }]
         },
         options: {
@@ -472,6 +490,27 @@ function renderAllocationChart(labels, data, colors) {
                 legend: {
                     position: 'right',
                     labels: { color: '#a0a0a0' }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function (context) {
+                            const value = context.raw;
+                            const total = context.chart._metasets[context.datasetIndex].total;
+                            const percentage = ((value / total) * 100).toFixed(1) + "%";
+                            return ` ₹${value.toLocaleString()} (${percentage})`;
+                        },
+                        afterLabel: function (context) {
+                            const companies = companyLists[context.dataIndex];
+                            return 'Holding: ' + companies.join(', ');
+                        }
+                    },
+                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                    titleColor: '#1e293b',
+                    bodyColor: '#475569',
+                    borderColor: '#e2e8f0',
+                    borderWidth: 1,
+                    padding: 12,
+                    displayColors: true
                 }
             }
         }

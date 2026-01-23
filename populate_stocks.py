@@ -22,7 +22,7 @@ sectors_data = {
         ("MPHASIS", "Mphasis Ltd", 2400.00), ("COFORGE", "Coforge Ltd", 6200.00), ("PERSISTENT", "Persistent Systems", 7800.00),
         ("OFSS", "Oracle Financial Services", 8500.00), ("KPITTECH", "KPIT Technologies", 1500.00), ("TATAELXSI", "Tata Elxsi", 7500.00),
         ("CYIENT", "Cyient Ltd", 1900.00), ("ZENSARTECH", "Zensar Technologies", 600.00), ("SONATSOFTW", "Sonata Software", 750.00),
-        ("BIRLASOFT", "Birlasoft Ltd", 700.00), ("INTELLECT", "Intellect Design", 1000.00), ("BSOFT", "Birlasoft Ltd", 720.00),
+        ("BIRLASOFT", "Birlasoft Ltd", 700.00), ("INTELLECT", "Intellect Design", 1000.00),
         ("MASTEK", "Mastek Ltd", 2800.00), ("NEWGEN", "Newgen Software", 850.00)
     ],
     "Finance": [
@@ -50,7 +50,7 @@ sectors_data = {
         ("ADANIENSOL", "Adani Energy Solutions", 1100.00), ("TATAPOWER", "Tata Power", 430.00), ("JSWENERGY", "JSW Energy", 650.00),
         ("RECLTD", "REC Ltd", 500.00), ("PFC", "Power Finance Corp", 450.00), ("NHPC", "NHPC Ltd", 95.00),
         ("SJVN", "SJVN Ltd", 125.00), ("IREDA", "IREDA Ltd", 180.00), ("OIL", "Oil India Ltd", 630.00),
-        ("HPCL", "Hindustan Petroleum", 500.00), ("GUJGASLTD", "Gujarat Gas Ltd", 550.00)
+        ("HINDPETRO", "Hindustan Petroleum", 500.00), ("GUJGASLTD", "Gujarat Gas Ltd", 550.00)
     ],
     "Consumer": [
         ("HINDUNILVR", "Hindustan Unilever", 2400.00), ("ITC", "ITC Ltd", 410.00), ("TITAN", "Titan Company", 3600.00),
@@ -92,17 +92,19 @@ def populate_db():
                 final_price = price + random.uniform(-price*0.02, price*0.02) # 2% variation
 
                 if symbol not in existing_symbols:
+                    momentum = random.uniform(30.0, 95.0)
                     cur.execute("""
-                        INSERT INTO Stock (symbol, name, sector, current_price)
-                        VALUES (%s, %s, %s, %s)
-                    """, (symbol, name, sector, round(final_price, 2)))
+                        INSERT INTO Stock (symbol, name, sector, current_price, momentum_score)
+                        VALUES (%s, %s, %s, %s, %s)
+                    """, (symbol, name, sector, round(final_price, 2), round(momentum, 2)))
                     count += 1
                 else:
-                    # Update price and name for existing symbols
+                    # Update price, name and momentum for existing symbols
+                    momentum = random.uniform(30.0, 95.0)
                     cur.execute("""
-                        UPDATE Stock SET name = %s, current_price = %s, sector = %s
+                        UPDATE Stock SET name = %s, current_price = %s, sector = %s, momentum_score = %s
                         WHERE symbol = %s
-                    """, (name, round(final_price, 2), sector, symbol))
+                    """, (name, round(final_price, 2), sector, round(momentum, 2), symbol))
         
         conn.commit()
         print(f"Successfully processed database. Added {count} new stocks.")
