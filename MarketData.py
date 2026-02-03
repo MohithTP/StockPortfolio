@@ -34,26 +34,15 @@ def update_all_prices():
             for i in range(0, len(symbols_with_suffix), chunk_size):
                 chunk = symbols_with_suffix[i:i + chunk_size]
                 try:
-                    # Added auto_adjust=True to fix warning and potentially improve data quality
                     chunk_data = yf.download(chunk, period="5d", interval="1d", group_by='ticker', progress=False, auto_adjust=True)
                     
                     if all_data is None:
                         all_data = chunk_data
                     else:
-                        # Merge depends on pandas structure, but yf returns MultiIndex columns if >1 ticker
-                        # Simplest way is to just use a combined dict or rely on yf structure
-                        # Since we iterate later, let's just use a dictionary of dataframes
                         pass 
                         
                 except Exception as e:
                     print(f"Chunk fetch failed: {e}")
-
-            # Re-fetch everything in one go IF list is small, otherwise use the chunked approach
-            # Actually, yf.download returns a big DF. Merging DFs is complex if not aligned.
-            # Better approach: Just use a longer timeout or retry logic with the full list but smaller batches *if* distinct.
-            
-            # Let's try the full download again but with auto_adjust=True which might be faster/cleaner
-            # If it fails, we will rely on fine-grained errors
             
             all_data = yf.download(symbols_with_suffix, period="5d", interval="1d", group_by='ticker', progress=False, auto_adjust=True, threads=True) 
 
