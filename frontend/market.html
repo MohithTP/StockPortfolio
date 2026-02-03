@@ -242,7 +242,7 @@
                     </div>
                     <select id="sector-filter" class="sector-select">
                         <option value="ALL">All Industries</option>
-                        <option value="IT">Information Technology</option>
+                        <option value="Technology">Information Technology</option>
                         <option value="Finance">Financial Services</option>
                         <option value="Healthcare">Healthcare & Pharma</option>
                         <option value="Energy">Energy & Utilities</option>
@@ -279,11 +279,6 @@
             checkSession();
             setTimeout(refreshMarket, 100);
         });
-
-        function filterMarket() {
-            const sector = document.getElementById('sector-filter').value;
-            renderMarketGrid(sector);
-        }
     </script>
 </body>
 
